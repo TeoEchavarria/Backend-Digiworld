@@ -12,16 +12,10 @@ from models import *
 
 app = FastAPI(title='Backend Junior Python Digiworld')
 
-#Crear tarea
-#Editar tarea
-#Eliminar tarea
-#Listar todas las tareas
-#Listar una tarea
-
 # ----------------------------------------
 #                DataBase
 #-----------------------------------------
-myConexion = pymysql.connect( host='localhost', user= 'root', passwd= "root", db='backend_digiworld' )
+myConexion = pymysql.connect( host='us-cdbr-east-05.cleardb.net', user= 'ba53bb8ff7dd0a', passwd= "10868eba", db='heroku_559bfeb4e3afb86' )
 cur = myConexion.cursor()
 
 @app.get('/')
@@ -81,7 +75,7 @@ def login(email: EmailStr  = Form(...), password: str = Form(...)):
     Returns a LoginOut model with username and message
     """
     cur.execute(
-        f"SELECT * FROM backend_digiworld.user WHERE email =  '{str(email)}' AND password = '{password}';"
+        f"SELECT * FROM heroku_559bfeb4e3afb86.user WHERE email =  '{str(email)}' AND password = '{password}';"
     )
     row = cur.fetchone()
     myConexion.commit()
@@ -122,7 +116,7 @@ def show_a_tarea_id(tarea_id : UUID = Path(
     - message : str
     """
     cur.execute(
-        f"SELECT * FROM backend_digiworld.tareas WHERE tarea_id =  '{str(tarea_id)}';"
+        f"SELECT * FROM heroku_559bfeb4e3afb86.tareas WHERE tarea_id =  '{str(tarea_id)}';"
     )
     i = cur.fetchall()
     if i == ():
@@ -157,7 +151,7 @@ def show_all_tareas():
     - message : str
     """
     cur.execute(
-        "SELECT * FROM backend_digiworld.tareas;"
+        "SELECT * FROM heroku_559bfeb4e3afb86.tareas;"
     )
     reply = [show_a_tarea_id(list(i)[0])for i in cur.fetchall()]
     myConexion.commit()
@@ -222,7 +216,7 @@ def update_a_tarea(tarea_update : Tarea = Body(...)):
     base = [ base_reply[key] if value == "" else value for (key,value) in tarea_dict.items() ]
     base_reply = [value for value in base_reply.values() ]
     cur.execute(
-        f"UPDATE `backend_digiworld`.`tareas` SET `title` = '{base[1]}', `body_text` = '{base[2]}', `status` = '{base[3]}', `message` = 'Update Successfully' WHERE (`tarea_id` = '{str(base[0])}');"
+        f"UPDATE `heroku_559bfeb4e3afb86`.`tareas` SET `title` = '{base[1]}', `body_text` = '{base[2]}', `status` = '{base[3]}', `message` = 'Update Successfully' WHERE (`tarea_id` = '{str(base[0])}');"
     )
     myConexion.commit()
     return show_a_tarea_id(base[0])
@@ -257,7 +251,7 @@ def delete_a_tarea(tarea_id : UUID = Path(
     """
     answerd = show_a_tarea_id(tarea_id)
     cur.execute(
-    f"DELETE FROM `backend_digiworld`.`tareas` WHERE (`tarea_id` = '{str(tarea_id)}');"
+    f"DELETE FROM `heroku_559bfeb4e3afb86`.`tareas` WHERE (`tarea_id` = '{str(tarea_id)}');"
     )
     myConexion.commit()
     return answerd
