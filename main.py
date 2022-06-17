@@ -15,12 +15,8 @@ app = FastAPI(title='Backend Junior Python Digiworld')
 # ----------------------------------------
 #                DataBase
 #-----------------------------------------
-myConexion = pymysql.connect( host='us-cdbr-east-05.cleardb.net', user= 'ba53bb8ff7dd0a', passwd= "10868eba", db='heroku_559bfeb4e3afb86' )
+myConexion = pymysql.connect( host='us-cdbr-east-05.cleardb.net', user= 'ba53bb8ff7dd0a', passwd= '10868eba', db='heroku_559bfeb4e3afb86' )
 cur = myConexion.cursor()
-
-@app.get('/')
-def index():
-    return 'Backend Junior Python Digiworld'
 
 ### Register a user
 @app.post(
@@ -214,9 +210,9 @@ def update_a_tarea(tarea_update : Tarea = Body(...)):
     tarea_dict = tarea_update.dict()
     base_reply = show_a_tarea_id(tarea_dict['tarea_id'])
     base = [ base_reply[key] if value == "" else value for (key,value) in tarea_dict.items() ]
-    base_reply = [value for value in base_reply.values() ]
+    #base_reply = [value for value in base_reply.values() ]
     cur.execute(
-        f"UPDATE `heroku_559bfeb4e3afb86`.`tareas` SET `title` = '{base[1]}', `body_text` = '{base[2]}', `status` = '{base[3]}', `message` = 'Update Successfully' WHERE (`tarea_id` = '{str(base[0])}');"
+        f"UPDATE tareas SET title = '{base[1]}', body_text = '{base[2]}', status = '{base[3]}', message = 'Update Successfully' WHERE (tarea_id = '{str(base[0])}');"
     )
     myConexion.commit()
     return show_a_tarea_id(base[0])
