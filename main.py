@@ -16,6 +16,7 @@ app = FastAPI(title='Backend Junior Python Digiworld')
 #                DataBase
 #-----------------------------------------
 myConexion = pymysql.connect( host='us-cdbr-east-05.cleardb.net', user= 'ba53bb8ff7dd0a', passwd= '10868eba', db='heroku_559bfeb4e3afb86' )
+myConexion.ping()
 cur = myConexion.cursor()
 
 ### Register a user
